@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'restycloud.apps.RestycloudConfig',
+    'rest_framework_docs',
 ]
 
 MIDDLEWARE = [

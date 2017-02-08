@@ -21,6 +21,7 @@ from rest_framework_swagger.views import get_swagger_view
 urlpatterns = [
     url(r'^', include('restycloud.urls')),
     url(r'^admin/', admin.site.urls),
+    url(r'^docs/', include('rest_framework_docs.urls')),
 ]
 
 #urlpatterns = format_suffix_patterns(urlpatterns)
