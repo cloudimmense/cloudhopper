@@ -14,7 +14,11 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    ),
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -40,6 +44,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'restycloud.apps.RestycloudConfig',
     'rest_framework_docs',
+    'djoser',
+    'rest_framework.authtoken',
 ]
 
 MIDDLEWARE = [

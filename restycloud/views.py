@@ -11,12 +11,18 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.http import Http404
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import TokenAuthentication
+
 
 
 class SnippetList(APIView):
     """
     List all snippets, or create a new snippet.
     """
+    permission_classes = (IsAuthenticated, )
+    authentication_classes = (TokenAuthentication, )
+
     def get(self, request, format=None):
         snippets = Snippet.objects.all()
         serializer = SnippetSerializer(snippets, many=True)
