@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django.db import models
 
 # Create your models here.
-from django.db import models
 from pygments.lexers import get_all_lexers
 from pygments.styles import get_all_styles
 
@@ -19,6 +18,17 @@ class Snippet(models.Model):
     linenos = models.BooleanField(default=False)
     language = models.CharField(choices=LANGUAGE_CHOICES, default='python', max_length=100)
     style = models.CharField(choices=STYLE_CHOICES, default='friendly', max_length=100)
+
+    class Meta:
+        ordering = ('created',)
+
+class AWSCredentials(models.Model):
+    created = models.DateTimeField(auto_now_add=True)
+    cred_name = models.CharField(max_length=100, blank=True)
+    access_id = models.CharField(max_length=100, blank=False)
+    secret_key = models.CharField(max_length=100, blank=False)
+    assoc_acc = models.CharField(max_length=100, blank=False)
+    meta = models.TextField()
 
     class Meta:
         ordering = ('created',)
