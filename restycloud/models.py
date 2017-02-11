@@ -37,7 +37,7 @@ class AWSCredentials(models.Model):
 class GcloudCredentials(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     cred_name = models.CharField(max_length=100, blank=True)
-    type = models.CharField(max_length=100, blank=False)
+    account_type = models.CharField(max_length=100, blank=False)
     project_id = models.CharField(max_length=100, blank=False)
     private_key_id = models.CharField(max_length=100, blank=False)
     private_key = models.TextField()
