@@ -19,7 +19,6 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-from rest_framework import generics, status
 
 
 class SnippetList(APIView):

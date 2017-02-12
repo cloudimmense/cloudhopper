@@ -18,11 +18,15 @@ from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from rest_framework_swagger.views import get_swagger_view
 
+schema_view = get_swagger_view(title='Pastebin API')
+
 urlpatterns = [
     url(r'^', include('restycloud.urls')),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^docs/', include('rest_framework_docs.urls')),
     url(r'^auth/', include('djoser.urls.authtoken')),
+    url(r'^swaggerdocs/', schema_view),
+
 ]
 
 #urlpatterns = format_suffix_patterns(urlpatterns)
