@@ -3,6 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from restycloud import views
 
 urlpatterns = [
+    url(r'^hello_world/$', views.hello_world),
     url(r'^snippets/$', views.SnippetList.as_view()),
     url(r'^snippets/(?P<pk>[0-9]+)/$', views.SnippetDetail.as_view()),
     url(r'^credentials/aws/$', views.AWSCredentialList.as_view()),

@@ -21,6 +21,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 
+@api_view(['GET', 'POST'])
+def hello_world(request):
+    if request.method == 'POST':
+        return Response({"message": "Got some data!", "data": request.data})
+    return Response({"message": "Hello, world!"})
+
+
 class SnippetList(APIView):
     """
     List all snippets, or create a new snippet.
