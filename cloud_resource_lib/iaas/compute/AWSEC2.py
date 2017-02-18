@@ -2,10 +2,8 @@ from vm_service import AbstractVMService
 import json
 
 class AWSEC2(AbstractVMService):
+
     def __init__(self):
-        #self.credentials = credentials
-        #self.credentials = args[0]
-        #print self.credentials
         self.credential_type =  "aws"
         self.locations = [
             "us-east-1",
@@ -16,37 +14,64 @@ class AWSEC2(AbstractVMService):
             "ap-southeast-1",
             "ap-northeast-1",
             "ap-southeast-2",
-            #"ap-northeast-2",
             "sa-east-1"]
 
     def get_driver_by_region(self, credentials, region_name):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instances
+
     def list_instances(self, *args, **kwargs):
         instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
         return instances
+
     def list_instance_by_region(self, *args, **kwargs):
-        pass
+        instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
+        return instances
+
     def get_instance_by_id(self, *args, **kwargs):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instance
+
     def create_instance(self, *args, **kwargs):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instance
+
     def delete_instance_by_id(self, *args, **kwargs):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instance
+
     def stop_Instance(self, *args, **kwargs):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instance
+
     def restart_Instance(self, *args, **kwargs):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instance
+
     def get_size_object(self, driver, size_name):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instance
+
     def get_image_object(self, driver, image_id):
-        pass
+        instance = {"instance_id": "abc123"}
+        return instance
+
     def get_sizes(self, driver):
-        pass
+        instance = [{"instance_id": "abc123"}]
+        return instance
+
     def get_nodes(self, driver):
-        pass
+        instance = [{"instance_id": "abc123"}]
+        return instance
+
     def get_locations(self):
-        pass
+        instance = [{"instance_id": "abc123"}]
+        return instance
+
     def get_Images(self, driver):
-        pass
+        instance = [{"instance_id": "abc123"}]
+        return instance
+
     def list_key_pairs(self, *args, **kwargs):
-        pass
+        instance = [{"instance_id": "abc123"}]
+        return instance
