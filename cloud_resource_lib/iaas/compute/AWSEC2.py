@@ -30,6 +30,18 @@ class AWSEC2(AbstractVMService):
 
     def list_instances(self, *args, **kwargs):
         instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
+        params = {}
+        if filters:
+            params["Filters"] = filters
+        if dryrun:
+            params["DryRun"] = dryrun
+        instances = self.client.instances.filter(**params)
+        """
+        instances = ec2.instances.filter(
+            Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
+        for instance in instances:
+            print(instance.id, instance.instance_type)
+        """
         return instances
 
     def list_instance_by_region(self, *args, **kwargs):
