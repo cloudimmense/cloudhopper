@@ -1,5 +1,6 @@
-from vm_service import AbstractVMService
 import json
+from googleapiclient import discovery
+from vm_service import AbstractVMService
 
 class GcloudGCE(AbstractVMService):
     def __init__(self):
@@ -18,12 +19,26 @@ class GcloudGCE(AbstractVMService):
             "ap-southeast-2",
             #"ap-northeast-2",
             "sa-east-1"]
+        # how does it get the credentials what is the format
+        self.client = discovery.build('compute', 'v1', credentials=credentials) 
 
     def get_driver_by_region(self, credentials, region_name):
         pass
+
     def list_instances(self, *args, **kwargs):
         instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
-        return instances
+        params = {}
+        if project:
+            params["project"] = project
+        if zone:
+            params["zone"] = zone
+        result = self.client.instances().list(project=project, zone=zone).execute()
+        return result['items']
+        # sample code 
+        """
+        result = compute.instances().list(project=project, zone=zone).execute()
+        return result['items']
+        """
     def list_instance_by_region(self, *args, **kwargs):
         pass
     def get_instance_by_id(self, *args, **kwargs):
