@@ -3,6 +3,7 @@ from googleapiclient import discovery
 from vm_service import AbstractVMService
 
 class GcloudGCE(AbstractVMService):
+
     def __init__(self):
         #self.credentials = credentials
         #self.credentials = args[0]
@@ -39,29 +40,42 @@ class GcloudGCE(AbstractVMService):
         result = compute.instances().list(project=project, zone=zone).execute()
         return result['items']
         """
+
     def list_instance_by_region(self, *args, **kwargs):
         pass
+
     def get_instance_by_id(self, *args, **kwargs):
         pass
+
     def create_instance(self, *args, **kwargs):
         pass
+
     def delete_instance_by_id(self, *args, **kwargs):
         pass
+
     def stop_Instance(self, *args, **kwargs):
         pass
+
     def restart_Instance(self, *args, **kwargs):
         pass
+
     def get_size_object(self, driver, size_name):
         pass
+
     def get_image_object(self, driver, image_id):
         pass
+
     def get_sizes(self, driver):
         pass
+
     def get_nodes(self, driver):
         pass
+
     def get_locations(self):
         pass
+
     def get_Images(self, driver):
         pass
+
     def list_key_pairs(self, *args, **kwargs):
         pass
