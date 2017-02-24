@@ -7,3 +7,6 @@ djangorestframework-jwt==1.9.0
 djoser==0.5.4
 drfdocs==0.0.11
 httpie==0.9.9
+boto3=1.4.4
+oauth2client
+google-api-python-client
