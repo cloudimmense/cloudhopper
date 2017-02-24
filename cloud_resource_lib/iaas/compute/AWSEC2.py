@@ -54,64 +54,6 @@ class AWSEC2(AbstractVMService):
         return instance
 
     def create_instance(self, *args, **kwargs):
-        params = {}
-        params['ImageId'] = image_id
-        if dry_run:
-            params['DryRun'] = dry_run
-        if min_count:
-            params['MinCount'] = min_count
-        if max_count:
-            params['MaxCount'] = max_count
-        else:
-            params['MaxCount'] = 1
-        if key_name:
-            params['KeyName'] = key_name
-        if isinstance(security_groups, str):
-            params['SecurityGroups'] = [ security_groups]
-        elif  isinstance(security_groups, list):
-            params['SecurityGroups'] = security_groups
-        if isinstance(security_group_ids, str):
-            params['SecurityGroupsIds'] = [ security_group_ids ]
-        elif isinstance(security_groups_ids, list):
-            params['SecurityGroupsIds'] = security_group_ids
-        if user_data:
-            params['UserData'] = user_data
-        if placement:
-            params['Placement'] = placement
-        if kernel_id:
-            params['KernelId'] = kernel_id
-        if ramdisk_id:
-            params['RamdiskId'] = ramdisk_id
-        if blockdevice_mappings:
-            params['BlockDeviceMappings'] = blockdevice_mappings
-        if monitoring:
-            params[' Monitoring'] = { 'Enabled': monitoring }
-        if subnet_id:
-            params['SubnetId'] = subnet_id
-        if disable_api_termination:
-            params['DisableApiTermination'] = disable_api_termination
-        if instance_initiated_shutdown_behaviour:
-            params['InstanceInitiatedShutdownBehavior'] = instance_initiated_shutdown_behaviour
-        if private_ip_address:
-            params['PrivateIpAddress'] = private_ip_address
-        if isinstance(ipv6_addresses, list):
-            params['Ipv6Addresses'] = ipv6_addresses
-        elif isinstance(ipv6_addresses, str):
-            params['Ipv6Addresses'] = [ {'Ipv6Address': ipv6_addresses} ]
-        if Ipv6Address:
-            params['Ipv6AddressCount'] = ipv6_address_count,
-        if client_token:
-            params['ClientToken'] = client_token
-        if additional_info:
-            params['AdditionalInfo'] = additional_info
-        if network_interfaces:
-            params['NetworkInterfaces'] = network_interfaces
-        if iam_instace_profile:
-            params['iam_instance_profile'] iam_instace_profile
-        if ebs_optimized:
-            params['EbsOptimized'] = ebs_optimized
-        
-        instances = self.client.create_instances(**params)
         # samplecode
         """
         instance = ec2.create_instances(
@@ -201,11 +143,78 @@ class AWSEC2(AbstractVMService):
         EbsOptimized=True|False
         )
         """
+        params = {}
+        params['ImageId'] = image_id
+        if dry_run:
+            params['DryRun'] = dry_run
+        if min_count:
+            params['MinCount'] = min_count
+        if max_count:
+            params['MaxCount'] = max_count
+        else:
+            params['MaxCount'] = 1
+        if key_name:
+            params['KeyName'] = key_name
+        if isinstance(security_groups, str):
+            params['SecurityGroups'] = [ security_groups]
+        elif  isinstance(security_groups, list):
+            params['SecurityGroups'] = security_groups
+        if isinstance(security_group_ids, str):
+            params['SecurityGroupsIds'] = [ security_group_ids ]
+        elif isinstance(security_groups_ids, list):
+            params['SecurityGroupsIds'] = security_group_ids
+        if user_data:
+            params['UserData'] = user_data
+        if placement:
+            params['Placement'] = placement
+        if kernel_id:
+            params['KernelId'] = kernel_id
+        if ramdisk_id:
+            params['RamdiskId'] = ramdisk_id
+        if blockdevice_mappings:
+            params['BlockDeviceMappings'] = blockdevice_mappings
+        if monitoring:
+            params[' Monitoring'] = { 'Enabled': monitoring }
+        if subnet_id:
+            params['SubnetId'] = subnet_id
+        if disable_api_termination:
+            params['DisableApiTermination'] = disable_api_termination
+        if instance_initiated_shutdown_behaviour:
+            params['InstanceInitiatedShutdownBehavior'] = instance_initiated_shutdown_behaviour
+        if private_ip_address:
+            params['PrivateIpAddress'] = private_ip_address
+        if isinstance(ipv6_addresses, list):
+            params['Ipv6Addresses'] = ipv6_addresses
+        elif isinstance(ipv6_addresses, str):
+            params['Ipv6Addresses'] = [ {'Ipv6Address': ipv6_addresses} ]
+        if Ipv6Address:
+            params['Ipv6AddressCount'] = ipv6_address_count,
+        if client_token:
+            params['ClientToken'] = client_token
+        if additional_info:
+            params['AdditionalInfo'] = additional_info
+        if network_interfaces:
+            params['NetworkInterfaces'] = network_interfaces
+        if iam_instace_profile:
+            params['iam_instance_profile'] iam_instace_profile
+        if ebs_optimized:
+            params['EbsOptimized'] = ebs_optimized
+        
+        instances = self.client.create_instances(**params)
         return instances
 
     def delete_instance_by_ids(self, *args, **kwargs):
+        """
+        response = client.terminate_instances(
+           DryRun=True|False,
+           InstanceIds=[
+              'string',
+           ]
+         )
+        """
+        
         if wait:
-            self.client.instances.filter(InstanceIds=ids).terminate()
+            self.client.terminate_instances(InstanceIds=ids)
             self.wait_for_state(ids, "terminated")        
         else:
             self.client.instances.filter(InstanceIds=ids).terminate()
@@ -219,21 +228,48 @@ class AWSEC2(AbstractVMService):
                 time.sleep(10)
                 count = count - 1
         if count == 0:
-            return False
+            return False 
         return True
 
-    def stop_Instance(self, *args, **kwargs):
+    def stop_Instances(self, *args, **kwargs):
+        """
+        response = client.stop_instances(
+                   DryRun=True|False,
+                   InstanceIds=[
+                   'string',
+                   ],
+                   Force=True|False
+                  )
+        """
         instance = {"instance_id": "abc123"}
         if wait:
-            self.client.instances.filter(InstanceIds=ids).stop()
+            self.client.stop_instances(InstanceIds=ids)
             self.wait_for_state(ids, "stopped")        
         else:
-            self.client.instances.filter(InstanceIds=ids).stop()
+            self.client.stop_instances(InstanceIds=ids)
+        return instance
+    
+    def start_Instances(self, *args, **kwargs):
+        """
+        response = client.start_instances(
+                   DryRun=True|False,
+                   InstanceIds=[
+                   'string',
+                   ],
+                   Force=True|False
+                  )
+        """
+        instance = {"instance_id": "abc123"}
+        if wait:
+            self.client.start_instances(InstanceIds=ids)
+            self.wait_for_state(ids, "running")        
+        else:
+            self.client.start_instances(InstanceIds=ids)
         return instance
 
-    def restart_Instance(self, *args, **kwargs):
-        instance = {"instance_id": "abc123"}
-        self.client.instances.filter(InstanceIds=ids).restart()
+    def restart_Instances(self, *args, **kwargs):
+        self.stop_instances(ids=ids)
+        self.start_instances(ids=ids)
         
     def get_size_object(self, driver, size_name):
         instance = {"instance_id": "abc123"}
