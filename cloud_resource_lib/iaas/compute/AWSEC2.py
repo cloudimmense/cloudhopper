@@ -204,21 +204,29 @@ class AWSEC2(AbstractVMService):
         return instances
 
     def delete_instance_by_ids(self, *args, **kwargs):
-        self.client.instances.filter(InstanceIds=ids).terminate()
-        return instance
+        if wait:
+            self.client.instances.filter(InstanceIds=ids).terminate()
+            self.wait_for_state(ids, "terminated")        
+        else:
+            self.client.instances.filter(InstanceIds=ids).terminate()
     
-    def wait_for_state(self, ids, state ):
+    def wait_for_state(self, ids, state):
+        count = 10
         res = self.client.describe_instance_status(InstanceIds=ids)
         states = [x["InstanceState"]['Name'] for x in res["InstanceStatuses"]]
-        if state in states:
-            time.sleep(10)
+        while count >=0:
+            if len(set(states)) > 1:
+                time.sleep(10)
+                count = count - 1
+        if count == 0:
+            return False
         return True
 
     def stop_Instance(self, *args, **kwargs):
         instance = {"instance_id": "abc123"}
         if wait:
             self.client.instances.filter(InstanceIds=ids).stop()
-            self.wait_for_state(ids, "terminated")        
+            self.wait_for_state(ids, "stopped")        
         else:
             self.client.instances.filter(InstanceIds=ids).stop()
         return instance
