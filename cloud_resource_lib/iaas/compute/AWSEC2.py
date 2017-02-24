@@ -1,5 +1,6 @@
 import json
 import boto3
+import time
 from vm_service import AbstractVMService
 
 class AWSEC2(AbstractVMService):
@@ -202,18 +203,30 @@ class AWSEC2(AbstractVMService):
         """
         return instances
 
-    def delete_instance_by_id(self, *args, **kwargs):
-        instance = {"instance_id": "abc123"}
+    def delete_instance_by_ids(self, *args, **kwargs):
+        self.client.instances.filter(InstanceIds=ids).terminate()
         return instance
+    
+    def wait_for_state(self, ids, state ):
+        res = self.client.describe_instance_status(InstanceIds=ids)
+        states = [x["InstanceState"]['Name'] for x in res["InstanceStatuses"]]
+        if state in states:
+            time.sleep(10)
+        return True
 
     def stop_Instance(self, *args, **kwargs):
         instance = {"instance_id": "abc123"}
+        if wait:
+            self.client.instances.filter(InstanceIds=ids).stop()
+            self.wait_for_state(ids, "terminated")        
+        else:
+            self.client.instances.filter(InstanceIds=ids).stop()
         return instance
 
     def restart_Instance(self, *args, **kwargs):
         instance = {"instance_id": "abc123"}
-        return instance
-
+        self.client.instances.filter(InstanceIds=ids).restart()
+        
     def get_size_object(self, driver, size_name):
         instance = {"instance_id": "abc123"}
         return instance
