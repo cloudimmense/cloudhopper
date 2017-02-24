@@ -45,6 +45,11 @@ class AWSEC2(AbstractVMService):
         """
         return instances
 
+    def list_regions(self, *args, **kwargs):
+        client = self.client
+        regions = [region['RegionName'] for region in client.describe_regions()['Regions']]
+        return regions
+        
     def list_instance_by_region(self, *args, **kwargs):
         instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
         return instances
