@@ -236,7 +236,7 @@ class AWSEC2(AbstractVMService):
             return False 
         return True
 
-    def stop_Instances(self, *args, **kwargs):
+    def stop_instances(self, *args, **kwargs):
         """
         response = client.stop_instances(
                    DryRun=True|False,
@@ -254,7 +254,7 @@ class AWSEC2(AbstractVMService):
             self.client.stop_instances(InstanceIds=ids)
         return instance
     
-    def start_Instances(self, *args, **kwargs):
+    def start_instances(self, *args, **kwargs):
         """
         response = client.start_instances(
                    DryRun=True|False,
@@ -272,7 +272,7 @@ class AWSEC2(AbstractVMService):
             self.client.start_instances(InstanceIds=ids)
         return instance
 
-    def restart_Instances(self, *args, **kwargs):
+    def restart_instances(self, *args, **kwargs):
         self.stop_instances(ids=ids)
         self.start_instances(ids=ids)
         
@@ -296,7 +296,7 @@ class AWSEC2(AbstractVMService):
         instance = [{"instance_id": "abc123"}]
         return instance
 
-    def get_Images(self, driver):
+    def get_images(self, driver):
         instance = [{"instance_id": "abc123"}]
         return instance
 
