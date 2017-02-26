@@ -13,4 +13,8 @@ service = 'vm_service'
 # creating a aws client from cloud service factory
 csf = CloudServiceFactory()
 aws_obj = csf.get_share_obj(cloud_type, service, auth)
+# usage with out region 
+print(aws_obj.list_instances())
+# usage with region
+print(aws_obj.list_instances(region='us-west-1'))
 

@@ -18,7 +18,7 @@ class AWSEC2(AbstractVMService):
             "ap-southeast-2",
             "sa-east-1"]
         self.auth = auth
-        self.client = boto3.client(
+        self.client = boto3.resource(
                  'ec2',
                  # Hard coded strings as credentials, not recommended.
                  aws_access_key_id = auth['AWS_ACCESS_KEY_ID'],
@@ -26,8 +26,8 @@ class AWSEC2(AbstractVMService):
                  region_name = self.locations[0]
         )
 
-    def get_client(region='us-east-1'):
-        client = boto3.client(
+    def get_client(self, region='us-east-1'):
+        client = boto3.resource(
                  'ec2',
                  aws_access_key_id = self.auth['AWS_ACCESS_KEY_ID'],
                  aws_secret_access_key = self.auth['AWS_SECRET_ACCESS_KEY'],
@@ -35,25 +35,29 @@ class AWSEC2(AbstractVMService):
         )
         return client
 
-    def get_driver_by_region(self, credentials, region_name):
-        instance = {"instance_id": "abc123"}
-        
-        return instances
-
     def list_instances(self, *args, **kwargs):
-        instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
         params = {}
-        if filters:
+        if kwargs.get('filters', None):
             params["Filters"] = filters
-        if dryrun:
+        if kwargs.get('dryrun', None):
             params["DryRun"] = dryrun
-        instances = self.client.instances.filter(**params)
+        if kwargs.get('region', None):
+            client = self.get_client(kwargs.get('region', None))
+        else:
+            client = self.client
+        instances = []
+        instances_call = client.instances.filter()
         """
-        instances = ec2.instances.filter(
-            Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
-        for instance in instances:
-            print(instance.id, instance.instance_type)
+        all the parameters listed below are subjected to change
+        based on requirements.
+        Currently lists instance dicts with public_ip and domain name
         """
+        for instance in instances_call:
+            inst = {}
+            inst['id'] = instance.id
+            inst['public_dns_name'] = instance.public_dns_name 
+            inst['public_ip_address'] = instance.public_ip_address
+            instances.append(inst)
         return instances
 
     def list_regions(self, *args, **kwargs):
