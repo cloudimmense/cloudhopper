@@ -5,7 +5,7 @@ from vm_service import AbstractVMService
 
 class AWSEC2(AbstractVMService):
 
-    def __init__(self):
+    def __init__(self, auth):
         self.credential_type =  "aws"
         self.locations = [
             "us-east-1",
@@ -17,32 +17,47 @@ class AWSEC2(AbstractVMService):
             "ap-northeast-1",
             "ap-southeast-2",
             "sa-east-1"]
-        self.client = boto3.client(
+        self.auth = auth
+        self.client = boto3.resource(
                  'ec2',
                  # Hard coded strings as credentials, not recommended.
-                 aws_access_key_id='AKIAIO5FODNN7EXAMPLE',
-                 aws_secret_access_key='ABCDEF+c2L7yXeGvUyrPgYsDnWRRC1AYEXAMPLE'
-        ) 
+                 aws_access_key_id = auth['AWS_ACCESS_KEY_ID'],
+                 aws_secret_access_key = auth['AWS_SECRET_ACCESS_KEY'],
+                 region_name = self.locations[0]
+        )
 
-    def get_driver_by_region(self, credentials, region_name):
-        instance = {"instance_id": "abc123"}
-        
-        return instances
+    def get_client(self, region='us-east-1'):
+        client = boto3.resource(
+                 'ec2',
+                 aws_access_key_id = self.auth['AWS_ACCESS_KEY_ID'],
+                 aws_secret_access_key = self.auth['AWS_SECRET_ACCESS_KEY'],
+                 region_name = region
+        )
+        return client
 
     def list_instances(self, *args, **kwargs):
-        instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
         params = {}
-        if filters:
+        if kwargs.get('filters', None):
             params["Filters"] = filters
-        if dryrun:
+        if kwargs.get('dryrun', None):
             params["DryRun"] = dryrun
-        instances = self.client.instances.filter(**params)
+        if kwargs.get('region', None):
+            client = self.get_client(kwargs.get('region', None))
+        else:
+            client = self.client
+        instances = []
+        instances_call = client.instances.filter()
         """
-        instances = ec2.instances.filter(
-            Filters=[{'Name': 'instance-state-name', 'Values': ['running']}])
-        for instance in instances:
-            print(instance.id, instance.instance_type)
+        all the parameters listed below are subjected to change
+        based on requirements.
+        Currently lists instance dicts with public_ip and domain name
         """
+        for instance in instances_call:
+            inst = {}
+            inst['id'] = instance.id
+            inst['public_dns_name'] = instance.public_dns_name 
+            inst['public_ip_address'] = instance.public_ip_address
+            instances.append(inst)
         return instances
 
     def list_regions(self, *args, **kwargs):
@@ -201,7 +216,7 @@ class AWSEC2(AbstractVMService):
         if network_interfaces:
             params['NetworkInterfaces'] = network_interfaces
         if iam_instace_profile:
-            params['iam_instance_profile'] iam_instace_profile
+            params['iam_instance_profile'] = iam_instace_profile
         if ebs_optimized:
             params['EbsOptimized'] = ebs_optimized
         

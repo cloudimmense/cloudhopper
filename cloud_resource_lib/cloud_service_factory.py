@@ -19,11 +19,3 @@ class CloudServiceFactory(object):
     
     def __init__(self):
         pass
-
-    def list_instances(self, creds):
-        #print creds
-        instance_list = []
-        for cloud_type in creds["directories"]:
-            c_obj = CloudServiceFactory.get_share_obj(cloud_type, "vm_service", auth)
-            instance_list.extend(c_obj.list_instances())
-        return instance_list
