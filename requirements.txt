@@ -10,3 +10,6 @@ httpie==0.9.9
 boto3==1.4.4
 oauth2client
 google-api-python-client
+pycrypto
+apache-libcloud
+
