@@ -1,45 +1,29 @@
 import json
-from googleapiclient import discovery
 from vm_service import AbstractVMService
+from libcloud.compute.types import Provider
+from libcloud.compute.providers import get_driver
 
 class GcloudGCE(AbstractVMService):
 
-    def __init__(self):
-        #self.credentials = credentials
-        #self.credentials = args[0]
-        #print self.credentials
+    def __init__(self, jsonfile):
         self.credential_type = "gce"
-        self.locations = [
-            "us-east-1",
-            "us-west-2",
-            "us-west-1",
-            "eu-west-1",
-            "eu-central-1",
-            "ap-southeast-1",
-            "ap-northeast-1",
-            "ap-southeast-2",
-            #"ap-northeast-2",
-            "sa-east-1"]
-        # how does it get the credentials what is the format
-        self.client = discovery.build('compute', 'v1', credentials=credentials) 
+        creds_json = json.loads(open(jsonfile,"r").read())
+        self.zone = "us-east1-b"
+        ComputeEngine = get_driver(Provider.GCE)
+        self.driver = ComputeEngine(creds_json["client_email"], jsonfile,
+                       project=creds_json["project_id"])
 
     def get_driver_by_region(self, credentials, region_name):
         pass
 
-    def list_instances(self, *args, **kwargs):
-        instances = [ {"instance_id": "abc123"}, {"instance_id": "ajnbd23434"}]
+    def list_instances(self, zone=None, *args, **kwargs):
         params = {}
-        if project:
-            params["project"] = project
         if zone:
-            params["zone"] = zone
-        result = self.client.instances().list(project=project, zone=zone).execute()
-        return result['items']
-        # sample code 
-        """
-        result = compute.instances().list(project=project, zone=zone).execute()
-        return result['items']
-        """
+            instances = self.driver.list_nodes(ex_zone=zone)
+        else:
+            instances = self.driver.list_nodes(ex_zone=zone)
+        instances = [x.__dict__ for x in instances]
+        return instances
 
     def list_instance_by_region(self, *args, **kwargs):
         pass
@@ -51,6 +35,9 @@ class GcloudGCE(AbstractVMService):
         pass
 
     def delete_instance_by_id(self, *args, **kwargs):
+        pass
+
+    def delete_instance_by_ids(self, *args, **kwargs):
         pass
 
     def stop_Instance(self, *args, **kwargs):
