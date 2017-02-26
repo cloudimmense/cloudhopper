@@ -23,6 +23,6 @@ class AbstractVMService(object):
         pass
 
     @abc.abstractmethod
-    def delete_instance_by_id(self, *args , **kwargs):
+    def delete_instance_by_ids(self, *args , **kwargs):
         pass
 
